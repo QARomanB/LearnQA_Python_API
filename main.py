@@ -8,7 +8,7 @@ def main():
 
     # проверка статус кода
     if response.status_code == 200:
-        # выводд ответа
+        # выводд ответа !
         print("Response body:")
         print(response.text)
     else:
