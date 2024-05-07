@@ -1,16 +1,19 @@
 import requests
 
-
 def main():
     url = "https://playground.learnqa.ru/api/get_text"
 
-    # Otpravka get zaprosa
+    # Sending a GET request
     response = requests.get(url)
 
-    # Vivod Tela otveta
-    print("Response body:")
-    print(response.text)
-
+    # Checking the status code
+    if response.status_code == 200:
+        # Printing the response body
+        print("Response body:")
+        print(response.text)
+    else:
+        print(f"Failed to get response. Status code: {response.status_code}")
 
 if __name__ == "__main__":
     main()
+
