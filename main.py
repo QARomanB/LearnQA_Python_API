@@ -3,12 +3,12 @@ import requests
 def main():
     url = "https://playground.learnqa.ru/api/get_text"
 
-    # Sending a GET request
+    # отправка гет запроса
     response = requests.get(url)
 
-    # Checking the status code
+    # проверка статус кода
     if response.status_code == 200:
-        # Printing the response body
+        # выводд ответа
         print("Response body:")
         print(response.text)
     else:
