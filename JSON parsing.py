@@ -1,6 +1,8 @@
 import json
 
-string_as_json_format= '{"messages":[{"message":"This is the first message","timestamp":"2021-06-04 16:40:53"},{"message":"And this is a second message","timestamp":"2021-06-04 16:41:01"}]}'
-obj = json.loads(string_as_json_format)
+json_data = '{"messages":[{"message":"This is the first message","timestamp":"2021-06-04 16:40:53"},{"message":"And this is a second message","timestamp":"2021-06-04 16:41:01"}]}'
 
-print(obj)
+parsed_data = json.loads(json_data)
+
+second_message_text = parsed_data['messages'][1]['message']
+print(second_message_text)
