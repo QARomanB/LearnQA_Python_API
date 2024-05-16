@@ -20,13 +20,6 @@ token = data.get('token')
 # Extract the time
 seconds = data.get('seconds')
 
-'''# Sending another GET request to the URL with a WRONG token as a parameter
-response_with_token = requests.get(url, params={'token': '1348'})
-
-# Print Code and text
-print("Status Code:", response_with_token.status_code)
-print("Response ERROR Text:", response_with_token.text)'''
-
 # Sending another GET request to the URL with token as a parameter
 response_with_token = requests.get(url, params={'token': token})
 
