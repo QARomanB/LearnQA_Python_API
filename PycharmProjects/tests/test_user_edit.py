@@ -1,4 +1,4 @@
-import requests
+from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
@@ -14,7 +14,7 @@ class TestUserEdit(BaseCase):
         # REGISTRATION of first user if not already done
         if cls.user_data_1 is None:
             register_data_1 = base_case_instance.prepare_registration_data()
-            response1 = requests.post("https://playground.learnqa.ru/api/user/", data=register_data_1)
+            response1 = MyRequests.post("/user/", data=register_data_1)
             Assertions.assert_code_status(response1, 200)
             Assertions.assert_json_has_key(response1, "id")
 
@@ -27,7 +27,7 @@ class TestUserEdit(BaseCase):
         # REGISTRATION of second user if not already done
         if cls.user_data_2 is None:
             register_data_2 = base_case_instance.prepare_registration_data()
-            response2 = requests.post("https://playground.learnqa.ru/api/user/", data=register_data_2)
+            response2 = MyRequests.post("/user/", data=register_data_2)
             Assertions.assert_code_status(response2, 200)
             Assertions.assert_json_has_key(response2, "id")
 
@@ -43,7 +43,7 @@ class TestUserEdit(BaseCase):
             'email': self.user_data_1['email'],
             'password': self.user_data_1['password']
         }
-        response2 = requests.post("https://playground.learnqa.ru/api/user/login", data=login_data)
+        response2 = MyRequests.post("/user/login", data=login_data)
 
         auth_sid = self.get_cookie(response2, "auth_sid")
         token = self.get_header(response2, "x-csrf-token")
@@ -51,8 +51,8 @@ class TestUserEdit(BaseCase):
         # EDIT
         new_name = "Changed name"
 
-        response3 = requests.put(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response3 = MyRequests.put(
+            f"/user/{self.user_data_1['user_id']}",
             headers={"x-csrf-token": token},
             cookies={"auth_sid": auth_sid},
             data={"firstName": new_name}
@@ -61,8 +61,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 200)
 
         # GET
-        response4 = requests.get(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response4 = MyRequests.get(
+            f"/user/{self.user_data_1['user_id']}",
             headers={"x-csrf-token": token},
             cookies={"auth_sid": auth_sid}
         )
@@ -78,8 +78,8 @@ class TestUserEdit(BaseCase):
         # EDIT without authorization
         new_name = "Changed name"
 
-        response2 = requests.put(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response2 = MyRequests.put(
+            f"/user/{self.user_data_1['user_id']}",
             data={"firstName": new_name}
         )
 
@@ -96,7 +96,7 @@ class TestUserEdit(BaseCase):
             'email': self.user_data_2['email'],
             'password': self.user_data_2['password']
         }
-        response3 = requests.post("https://playground.learnqa.ru/api/user/login", data=login_data_2)
+        response3 = MyRequests.post("/user/login", data=login_data_2)
 
         auth_sid_2 = self.get_cookie(response3, "auth_sid")
         token_2 = self.get_header(response3, "x-csrf-token")
@@ -104,8 +104,8 @@ class TestUserEdit(BaseCase):
         # Attempt to EDIT first user as second user
         new_name = "Changed name"
 
-        response4 = requests.put(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response4 = MyRequests.put(
+            f"/user/{self.user_data_1['user_id']}",
             headers={"x-csrf-token": token_2},
             cookies={"auth_sid": auth_sid_2},
             data={"firstName": new_name}
@@ -127,7 +127,7 @@ class TestUserEdit(BaseCase):
             'email': self.user_data_1['email'],
             'password': self.user_data_1['password']
         }
-        response2 = requests.post("https://playground.learnqa.ru/api/user/login", data=login_data)
+        response2 = MyRequests.post("/user/login", data=login_data)
 
         auth_sid = self.get_cookie(response2, "auth_sid")
         token = self.get_header(response2, "x-csrf-token")
@@ -135,8 +135,8 @@ class TestUserEdit(BaseCase):
         # EDIT email to invalid email
         invalid_email = "vinkotovexample.com"
 
-        response3 = requests.put(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response3 = MyRequests.put(
+            f"/user/{self.user_data_1['user_id']}",
             headers={"x-csrf-token": token},
             cookies={"auth_sid": auth_sid},
             data={"email": invalid_email}
@@ -153,7 +153,7 @@ class TestUserEdit(BaseCase):
             'email': self.user_data_1['email'],
             'password': self.user_data_1['password']
         }
-        response2 = requests.post("https://playground.learnqa.ru/api/user/login", data=login_data)
+        response2 = MyRequests.post("/user/login", data=login_data)
 
         auth_sid = self.get_cookie(response2, "auth_sid")
         token = self.get_header(response2, "x-csrf-token")
@@ -161,8 +161,8 @@ class TestUserEdit(BaseCase):
         # EDIT firstName to a short value of 1 symbol
         short_first_name = "K"
 
-        response3 = requests.put(
-            f"https://playground.learnqa.ru/api/user/{self.user_data_1['user_id']}",
+        response3 = MyRequests.put(
+            f"/user/{self.user_data_1['user_id']}",
             headers={"x-csrf-token": token},
             cookies={"auth_sid": auth_sid},
             data={"firstName": short_first_name}
