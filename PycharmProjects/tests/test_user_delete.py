@@ -133,9 +133,9 @@ class TestUserDelete(BaseCase):
         # Attempt to delete user1 with user2's credentials
         with allure.step('Attempt to delete user1 with user2 credentials \n'
                          'and printing out the response data : status code, cookies, token, response text'):
-            response5 = MyRequests.delete(f"/user/{user1_id}",
-                                          headers={"x-csrf-token": token1},
-                                          cookies={"auth_sid": auth_sid1})
+            response5 = MyRequests.delete(f"/user/{user2_id}",
+                                          headers={"x-csrf-token": token2},
+                                          cookies={"auth_sid": auth_sid2})
             response5_content = response5.content.decode('utf-8')
             print("Attempt to Delete User1 with User2's Credentials Response Content:", response5_content)
             print(f"Response Status Code: {response5.status_code}")
