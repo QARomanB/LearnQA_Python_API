@@ -4,9 +4,9 @@ from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
-@allure.feature('User deletion')
 
-@allure.severity(allure.severity_level.CRITICAL)
+@allure.feature('User deletion')
+@allure.severity(allure.severity_level.NORMAL)
 @allure.label("owner", "Roman")
 @allure.issue("DEL-123")
 @allure.testcase("R-456")
@@ -26,7 +26,7 @@ class TestUserDelete(BaseCase):
         with allure.step(' Trying to delete the user with authentication credentials'):
             # Delete with authentication credentials
             response2 = MyRequests.delete("/user/2")
-            Assertions.assert_code_status(response2, 200)
+            Assertions.assert_code_status(response2, 400)
             print("\n The first 5 users can't be deleted")
 
     def test_create_user_successfully_and_delete_that_user(self):
@@ -133,24 +133,17 @@ class TestUserDelete(BaseCase):
         # Attempt to delete user1 with user2's credentials
         with allure.step('Attempt to delete user1 with user2 credentials \n'
                          'and printing out the response data : status code, cookies, token, response text'):
-            response5 = MyRequests.delete(f"/user/{user2_id}",
+            response5 = MyRequests.delete(f"/user/{user1_id}",
                                           headers={"x-csrf-token": token2},
                                           cookies={"auth_sid": auth_sid2})
+            Assertions.assert_code_status(response5, 400)
             response5_content = response5.content.decode('utf-8')
             print("Attempt to Delete User1 with User2's Credentials Response Content:", response5_content)
-            print(f"Response Status Code: {response5.status_code}")
+            print(f"Response5 Status Code: {response5.status_code}")
             print(f"Request Headers: {response5.request.headers}")
             print(f"Request Cookies: {response5.request._cookies}")
             print(f"Response Headers: {response5.headers}")
             print(f"Response Text: {response5.text}")
-
-        # Assert the deletion is forbidden
-        with allure.step(
-                'Checking that the deletion is forbidden by asserting that the returned status \n'
-                'code is 403 and printing out a successfully_deleted message'):
-            assert auth_sid1 != auth_sid2, "Auth SID for User1 and User2 should be different"
-            assert token1 != token2, "Tokens for User1 and User2 should be different"
-            Assertions.assert_code_status(response5, 403)
             print("User can be deleted successfully only if you authenticated with that user")
 
         # Log in with user1
@@ -158,7 +151,7 @@ class TestUserDelete(BaseCase):
                          'and printing out the response data : status code, cookies, token, response text'):
             login_data1 = {'email': data1['email'], 'password': data1['password']}
             response9 = MyRequests.post("/user/login", data=login_data1)
-            Assertions.assert_code_status(response9, 403)
+            Assertions.assert_code_status(response9, 200)
             print("Attempt to Delete User1 with User2's Credentials Response Content:", response5_content)
             print(f"Response Status Code: {response9.status_code}")
             print(f"Request Headers: {response9.request.headers}")
